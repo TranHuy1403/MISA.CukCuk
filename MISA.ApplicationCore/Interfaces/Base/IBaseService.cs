@@ -13,6 +13,13 @@ namespace MISA.ApplicationCore.Interfaces.Base
         /// <returns>MethodResult<List<TModel>></returns>
         IMethodResult<List<TModel>> GetAll();
         /// <summary>
+        /// lấy số lượng bản ghi theo từng trang
+        /// </summary>
+        /// <param name="page">chỉ số trang</param>
+        /// <param name="countRecord">số lượng bản ghi của trang</param>
+        /// <returns>IMethodResult<List<TModel>></returns>
+        IMethodResult<List<TModel>> GetLimit(int page, int countRecord);
+        /// <summary>
         /// lấy dữ liệu theo id
         /// </summary>
         /// <param name="id">id của object</param>

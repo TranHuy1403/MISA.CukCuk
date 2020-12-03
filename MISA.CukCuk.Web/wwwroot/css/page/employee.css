@@ -137,7 +137,7 @@
 
 .toolbar-content select{
     margin-right: 16px;
-    width: 160px;
+    width: 180px;
 }
 
     .gird table tr:hover {
@@ -155,19 +155,23 @@
     justify-content: space-between;
 }
 
-    .tfoot .count-emplyee{
-        
-    }
-
-    .tfoot .count-page {
+    .tfoot .tfoot-right {
         background-color: #ffffff;
         padding-left: 12px;
         padding-right: 12px;
     }
 
-    .tfoot .page-navigations{
-        align-items:center;
-    }
+.select-count-record {
+    width: 55px;
+    margin: 0;
+    padding: 0;
+    border: 0px;
+}
+
+.tfoot .page-navigations {
+    display: flex;
+    align-items: center;
+}
 
         .tfoot .page-navigations button {
             outline: none;
@@ -215,3 +219,28 @@
         .tfoot .page-navigations .page-selected {
             background-color: #019160;
         }
+
+.content .tfoot{
+    
+}
+
+.load-data {
+    visibility: hidden;
+    position: absolute;
+    left: 50%;
+    right: 50%;
+    z-index: 90;
+    width: 50px;
+    height: 50px;
+}
+
+.load-modal-opacity {
+    opacity: .5;
+    position: relative;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: black;
+    z-index: 80;
+}

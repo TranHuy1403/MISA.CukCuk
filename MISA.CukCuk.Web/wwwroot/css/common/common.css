@@ -29,7 +29,7 @@ table th, td {
 }
 
 tr.row-selected td {
-    background-color: #EBF9F4;
+    background-color: #01B075;
 }
 
 button.btn-icon {
@@ -106,6 +106,7 @@ input,select {
     padding-left: 16px;
     padding-right: 16px;
     overflow: auto;
+    z-index: 50;
 }
 
 
@@ -134,5 +135,5 @@ the.gird-header tr {
 }
 
 .gird table tr:hover {
-    background-color: #E9EBEE;
+    background-color: #2FBE8E;
 }

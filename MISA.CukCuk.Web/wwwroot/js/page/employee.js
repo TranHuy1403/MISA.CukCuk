@@ -12,6 +12,7 @@ $(document).ready(function () {
 class Employee extends Base {
     constructor() {
         super();
+        this.buildSelectsEmployee();
         this.search();
         this.getMaxEmployeeCode();
     }
@@ -20,25 +21,41 @@ class Employee extends Base {
         this.getUrl = "/api/v1/employees";
     }
 
+    /**
+     * hàm tìm kiếm
+     * */
     search() {
         var me = this;
         $('.search-select').change(function () {
+            var propertyValue = $('.search').val();
             var departmentID = $('.search-select-department option:selected').val();
             var possitionID = $('.search-select-possition option:selected').val();
-            var url = "";
-            if (departmentID == null) {
-                url = me.getUrl + `/filter?propertyValue=${departmentID}`;
-            }
-            else if (possitionID == null) {
-                url = me.getUrl + `/filter?propertyValue=${possitionID}`;
-            }
-            else {
-                url = me.getUrl + `/filters?DepartmentID=${departmentID}&PossitionID=${possitionID}`;
-            }
+            var url = `${me.getUrl}/filter?propertyValue=${propertyValue}&departmentID=${departmentID}&PossitionID=${possitionID}`;          
             me.getData(url);
+        });
+
+        $('.search').on('keypress', function (e) {
+            if (e.which == 13) {
+                var propertyValue = $('.search').val();
+                var departmentID = $('.search-select-department option:selected').val();
+                var possitionID = $('.search-select-possition option:selected').val();
+                propertyValue = propertyValue.toLowerCase().replace(/^\w|\s\w/g, function (letter) {
+                    return letter.toUpperCase();
+                })
+
+                var url = `${me.getUrl}/filter?propertyValue=${propertyValue}&departmentID=${departmentID}&PossitionID=${possitionID}`;
+                me.getData(url);
+            }
         });
     }
 
+    // build combobox 
+    buildSelectsEmployee() {
+        $('#DepartmentName').append($('<option value="" selected>Tất cả phòng ban</option>'));
+        $('#PossitionName').append($('<option value="" selected>Tất cả vị trí</option>'));       
+    }
+
+    // lấy mã nhân viên lớn nhất khi thực hiện thêm mới
     getMaxEmployeeCode() {
         var me = this;
         $('.button-insert').click(function () {

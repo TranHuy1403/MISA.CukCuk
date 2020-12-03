@@ -19,18 +19,12 @@ namespace MISA.CukCuk.Web.Controllers
 
         //[Route("search")]
         [HttpGet("filter")]
-        public IActionResult SearchByProperty([FromQuery]string propertyValue)
+        public IActionResult SearchByProperty([FromQuery]string propertyValue, [FromQuery] string DepartmentID, [FromQuery] string PossitionID)
         {
-            var result = _employeeService.GetEmployeeByPropertyValue(propertyValue);
+            var result = _employeeService.GetEmployeesFilter(propertyValue, DepartmentID, PossitionID);
             return Ok(result);
         }
 
-        [HttpGet("filters")]
-        public IActionResult GetEmployeeByDepartPossition([FromQuery]string DepartmentID, [FromQuery]string PossitionID)
-        {
-            var result = _employeeService.GetEmployeeByDepartPossition(DepartmentID, PossitionID);
-            return Ok(result);
-        }
 
         [Route("GetMaxEmployeeCode")]
         [HttpGet()]

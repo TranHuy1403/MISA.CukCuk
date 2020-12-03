@@ -19,18 +19,13 @@ namespace MISA.Infarstructure
             
         }
 
-        public IMethodResult<List<Employee>> GetEmployeeByDepartPossition(string DepartmentID, string PossitionID)
+        public IMethodResult<List<Employee>> GetEmployeesFilter(string specs, string DepartmentID, string PossitionID)
         {
             var parameter = new DynamicParameters();
+            parameter.Add("PropertyValue", specs!=null? specs: String.Empty, DbType.String);
             parameter.Add("DepartmentID", DepartmentID, DbType.String);
-            parameter.Add("PossitonID", PossitionID, DbType.String);
-            var result = conn.Query<Employee>($"Proc_Get{_tableName}ByDepartPossiton", parameter, commandType: CommandType.StoredProcedure).ToList();
-            return MethodResult<List<Employee>>.ResultWithData(result, totalRecord: result.Count);
-        }
-
-        public IMethodResult<List<Employee>> GetEmployeeByPropertyValue(string propertyValue)
-        {
-            var result = conn.Query<Employee>($"Proc_Get{_tableName}ByPropertyValue", new { PropertyValue = propertyValue }, commandType: CommandType.StoredProcedure).ToList();
+            parameter.Add("PossitionID", PossitionID, DbType.String);
+            var result = conn.Query<Employee>($"Proc_Get{_tableName}sFilter", parameter, commandType: CommandType.StoredProcedure).ToList();
             return MethodResult<List<Employee>>.ResultWithData(result, totalRecord: result.Count);
         }
 

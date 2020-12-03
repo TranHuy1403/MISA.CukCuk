@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using MISA.ApplicationCore.Entities.Enums;
 using MISA.ApplicationCore.Interfaces.Base;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -32,7 +33,13 @@ namespace MISA.CukCuk.Web.Controllers
             var data = _iModelService.GetAll();
             return Ok(data);
         }
-
+        [Route("Limit")]
+        [HttpGet]
+        public IActionResult GetLimit([FromQuery]int page, [FromQuery]int countRecord)
+        {
+            var data = _iModelService.GetLimit(page, countRecord);
+            return Ok(data);
+        }
         // GET api/<modelsController>/5
         /// <summary>
         /// lấy bản ghi theo id
@@ -58,7 +65,14 @@ namespace MISA.CukCuk.Web.Controllers
         public IActionResult Post(TModel model)
         {           
             var newItem = _iModelService.Insert(model);
-            return Ok(newItem);
+            if (newItem.Success == true)
+            {
+                return Ok(newItem);
+            }
+            else
+            {
+                return BadRequest(newItem);
+            }
         }
 
         // PUT api/<modelsController>/5
@@ -73,7 +87,15 @@ namespace MISA.CukCuk.Web.Controllers
         public IActionResult Put(Guid id, [FromBody] TModel model)
         {           
             var newItem = _iModelService.Update(id,model);
-            return Ok(newItem);
+            if(newItem.Success == true)
+            {
+                return Ok(newItem);
+            }
+            else
+            {
+                return BadRequest(newItem);
+            }
+            
         }
 
         // DELETE api/<modelsController>/5

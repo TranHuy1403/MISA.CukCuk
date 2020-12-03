@@ -199,6 +199,12 @@ namespace MISA.ApplicationCore.Service
             methodResult.Message = msg;
             return methodResult;
         }
+
+        public IMethodResult<List<TModel>> GetLimit(int page, int countRecord)
+        {
+            var result = _baseRepos.GetLimit(page, countRecord);
+            return result;
+        }
         #endregion
     }
 }

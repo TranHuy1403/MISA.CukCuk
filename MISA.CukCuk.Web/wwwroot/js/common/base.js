@@ -9,9 +9,10 @@ class Base {
         this.getUrl = null;
         this.setUrl();
         this.buildSelects();
-        this.getData(this.getUrl);
+        this.functionsBuildTable(1);
+        //this.getData(this.getUrl);
         this.initEvents();
-        this.functionsValidate();        
+        this.functionsValidate();
     }
 
     /**
@@ -24,7 +25,10 @@ class Base {
      * hàm gọi api trả về dữ liệu rồi đẩy lên table
      * tqhuy 12/11/2020 
      */
-    getData(url) {     
+    getData(url) {
+        var me = this;
+        $('.load-data-modal').addClass("load-modal-opacity");
+        $('.load-data').show();
         $.ajax({
             url: url,
             method: "GET",
@@ -45,34 +49,30 @@ class Base {
                         var fieldName = $(column).attr("fieldName");
                         var formatType = $(column).attr("formatType");
                         
-                        if (fieldName != "index") {
-
-                            if (formatType == "ddmmyyyy") {
-                                td.addClass("text-align-center");
-                                td.append(formatDate(item[fieldName]));                      
-                            }
-                            else if (formatType == "Money") {
-                                td.addClass("text-align-right");
-                                td.append(formatMoney(item[fieldName]));
-                            }                           
-                            else {
-                                td.append(item[fieldName]);
-                            }
-                            td.addClass("max-with");
-                            td.attr("title", item[fieldName]);
-                            rowtable = rowtable.append(td);
-                            
+                        if (formatType == "ddmmyyyy") {
+                            td.addClass("text-align-center");
+                            td.append(formatDate(item[fieldName]));
                         }
-                        else{
-                            rowtable = rowtable.append(`<td>${index + 1}</td>`);
+                        else if (formatType == "Money") {
+                            td.addClass("text-align-right");
+                            td.append(formatMoney(item[fieldName]));
                         }
+                        else {
+                            td.append(item[fieldName]);
+                        }
+                        td.addClass("max-with");
+                        td.attr("title", item[fieldName]);
+                        rowtable = rowtable.append(td);
 
                     });
                     $("tbody").append(rowtable);
                 });
+
+                $('.load-data-modal').removeClass("load-modal-opacity");
+                $('.load-data').hide();
             },
             error: function (err) {
-                this.snackError("Có lỗi khi load dữ liệu!");
+                me.snackError("Có lỗi khi load dữ liệu!");
             }
         });
     }
@@ -125,7 +125,6 @@ class Base {
                     }
                     me.hidePopup();
                     me.hideDialog();
-                    //$("input[type=text], input[type=date], input[type=email]").val(null);
                 });
             }
             catch (err) {
@@ -166,17 +165,86 @@ class Base {
                 console.log("Có lỗi xảy ra!");
             }
         })
-        
+
+
         // event chọn trang dữ liệu của table
         $('.page-table').click(function () {
             try {
                 $(this).addClass("page-selected");
+                var page = $(this).html();
+                var check = $(this).attr("nextPage");
+                if (check == "right") {
+                    var pages = $('button.page-table');
+                    $.each(pages, function (index, item) {
+                        var vale = $(item).html();
+                        $(item).html(parseInt(vale) +1)
+                    })
+                }
+                else if (check == "left") {
+                    var pages = $('button.page-table');
+                    $.each(pages, function (index, item) {
+                        var vale = $(item).html();
+                        if (parseInt(vale) -1 != index) {
+                            $(item).html(parseInt(vale) - 1)
+                        }                        
+                    })
+                }
+                me.functionsBuildTable(page);
                 $(this).siblings().removeClass("page-selected");
             }
             catch (err) {
                 console.log("Có lỗi xảy ra!");
             }
-        })
+        });
+
+        // event click button chuyern trang 
+        $('.next-page').click(function () {
+            try {
+                
+                
+                var pageVale = $('.page-selected').val()
+                var check = $(this).attr("nextPage");
+                if (check == "right") {
+                    if (pageVale == "5") {
+                        var pages = $('button.page-table');
+                        $.each(pages, function (index, item) {
+                            var vale = $(item).html();
+                            $(item).html(parseInt(vale) + 1)
+                        })
+                        
+                    }
+                    else {
+                        var pageNext = parseInt(pageVale) + 1;
+                        $(`.page${pageNext}`).addClass("page-selected");
+                        $(`.page${pageNext}`).siblings().removeClass("page-selected");
+                    }
+                    
+                }
+                else if (check == "left") {
+                    if (pageVale == "1") {
+                        var pages = $('button.page-table');
+                        $.each(pages, function (index, item) {
+                            var vale = $(item).html();
+                            if (parseInt(vale) - 1 != index) {
+                                $(item).html(parseInt(vale) - 1)
+                            }
+                        });
+                        
+                    }
+                    else {
+                        var pageNext = parseInt(pageVale) - 1;
+                        $(`.page${pageNext}`).addClass("page-selected");
+                        $(`.page${pageNext}`).siblings().removeClass("page-selected");
+                    }
+                    
+                }
+                var page = $('.page-selected').html();
+                me.functionsBuildTable(page);                
+            }
+            catch (err) {
+                console.log("Có lỗi xảy ra!");
+            }
+        });
 
         // sự kiện dbclick vào row table hiển thị thông tin chi tiết
         $('table tbody').on('dblclick', 'tr', function () {
@@ -211,42 +279,47 @@ class Base {
             
         });
 
-        // sự kiện tìm kiếm
-        me.eventSearch();
-    }
 
-    /**
-     * hàm tìm kiếm
-     * */
-    eventSearch() {
-        var me = this;
-        $('.search').on('keypress', function (e) {
-            if (e.which == 13) {
-                var propertyValue = $('.search').val();
-                propertyValue = propertyValue.toLowerCase().replace(/^\w|\s\w/g, function (letter) {
-                    return letter.toUpperCase();
-                })
-
-                var url = me.getUrl + `/filter?propertyValue=${propertyValue}`;
-                me.getData(url);
+        // envent build tfoot table
+        $('.select-count-record').change(function () {
+            try {
+                me.functionsBuildTable(1);             
             }
-        });
-
-        //$('.search-select-department').change(function () {
-
-        //    var propertyValue = $('.search-select-department option:selected').val();
-        //    var url = me.getUrl + `/filter?propertyValue=${propertyValue}`;
-        //    me.getData(url);
-        //});
-
-        //$('.search-select-possition').change(function () {
-
-        //    var propertyValue = $('.search-select-possition option:selected').val();
-        //    var url = me.getUrl + `/filter?propertyValue=${propertyValue}`;
-        //    me.getData(url);
-        //})
-
+            catch (err) {
+                console.log(err);
+            }
+        })
     }
+
+    functionsBuildTable(page) {
+        var me = this;
+        var countRecord = $('.select-count-record option:selected').val();
+        $('.shows-record').html(`Hiển thị  ${page * countRecord - countRecord +1}-${page * countRecord}/`)
+        $.ajax({
+            url: me.getUrl,
+            method: 'GET',
+            dataType: 'JSON',
+            success: function (response) {
+                var totalRecord = response.TotalRecord;
+                $('.total-record').html(`${totalRecord} bản ghi.`);
+                me.getData(me.getUrl + `/limit?page=${page}&countrecord=${countRecord}`);
+            },
+            error: function (response) {
+
+            }
+        })
+    }
+
+    functionSelectPage() {
+        try {
+            $(this).addClass("page-selected");
+            $(this).siblings().removeClass("page-selected");
+        }
+        catch (err) {
+            console.log("Có lỗi xảy ra!");
+        }
+    }
+    
 
     /**
      * hàm dbclick vào rowtable để hiển thị thông tin chi tiết
@@ -326,7 +399,7 @@ class Base {
         })
         var inputNotValids = $('input[validate="false"]');
         if (inputNotValids && inputNotValids.length > 0) {
-            me.snackError("Dữ liệu không hợp lệ vui lòng kiểm tra lại!");
+            me.snackError("Dữ liệu không hợp lệ!");
             inputNotValids[0].focus();
             return;
         }
@@ -355,8 +428,7 @@ class Base {
             item[me.fieldPrimaryKey] = me.valuePrimaryKey;
             url = url + `/${me.valuePrimaryKey}`;
         }
-
-        // gọi api
+     
         $.ajax({
             url: url,
             method: me.method,
@@ -368,11 +440,22 @@ class Base {
                 me.snackbarSuccess(response.Message);
             },
             error: function (response) {
-                me.hideDialog();
-                me.snackError(response.Message);
+                //me.hideDialog();
+                var mesengers = response.responseJSON.Message;
+                $.each(mesengers, function (index, mesenger) {
+                    me.snackError(mesenger);
+                });
+                
             }
+            //statusCode: {
+            //    400: function (response) {
+            //        me.hideDialog();
+            //        me.snackError(response.Message);
+            //    }
+            //}
         });
-    }
+        
+    }   
 
     /**
      * hàm show dialog hiển thị thông tin chi tiết, form thêm mới

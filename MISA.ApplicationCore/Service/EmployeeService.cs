@@ -17,20 +17,9 @@ namespace MISA.ApplicationCore.Service
             _employeeRepos = employeeRepos;
         }
 
-        public IMethodResult<List<Employee>> GetEmployeeByDepartPossition(string DepartmentID, string PossitionID)
+        public IMethodResult<List<Employee>> GetEmployeesFilter(string specs, string DepartmentID, string PossitionID)
         {
-            var result = _employeeRepos.GetEmployeeByDepartPossition(DepartmentID, PossitionID);
-            return result;
-        }
-
-        /// <summary>
-        /// tìm kiếm employees theo giá trị của các trường Mã NV, Họ Tên, SĐT
-        /// </summary>
-        /// <param name="propertyValue">giá trị của property</param>
-        /// <returns>MethodResult<List<Employee>></returns>
-        public IMethodResult<List<Employee>> GetEmployeeByPropertyValue(string propertyValue)
-        {
-            var result = _employeeRepos.GetEmployeeByPropertyValue(propertyValue);
+            var result = _employeeRepos.GetEmployeesFilter(specs, DepartmentID, PossitionID);
             return result;
         }
 

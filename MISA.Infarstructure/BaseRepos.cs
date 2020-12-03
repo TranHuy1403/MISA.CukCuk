@@ -40,8 +40,9 @@ namespace MISA.Infarstructure
         /// <returns>MethodResult</returns>
         /// createdBy: tqhuy(25/11/2020)
         public IMethodResult<List<TModel>> GetAll()
-        {            
+        {
             var data = conn.Query<TModel>($"Proc_Get{_tableName}s", commandType: CommandType.StoredProcedure).ToList();
+            //var data = conn.Query<TModel>($"select * from {_tableName}", commandType: CommandType.StoredProcedure).ToList();
             return MethodResult<List<TModel>>.ResultWithData(data, totalRecord: data.Count);
         }
         /// <summary>
@@ -112,6 +113,15 @@ namespace MISA.Infarstructure
             }
             else { return null; }
             
+        }
+
+        public IMethodResult<List<TModel>> GetLimit(int page, int countRecord)
+        {
+            var parameter = new DynamicParameters();
+            parameter.Add("Page", page, DbType.Int32);
+            parameter.Add("CountRecord", countRecord, DbType.Int32);
+            var result = conn.Query<TModel>($"Proc_Get{_tableName}sLimit", parameter,commandType: CommandType.StoredProcedure).ToList();
+            return MethodResult<List<TModel>>.ResultWithData(result, totalRecord: result.Count);
         }
         #endregion
     }

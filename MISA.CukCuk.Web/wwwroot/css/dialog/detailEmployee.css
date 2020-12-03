@@ -1,5 +1,5 @@
 ﻿/*css cho dialog - form hiển thị chi tiết, thêm mới, sửa thông tin khách hàng, nhân viên*/
-@import url('detailcustomer.css');
+/*@import url('detailcustomer.css');*/
 .dialog {
     position: absolute;
     left: 50%;
@@ -45,15 +45,15 @@
 .dialog-content {
     position: relative;
     background-color: #ffffff;
-    height: 710px;
+    height: auto;
     margin: 24px 16px 24px 24px;
 }
 
 
-    .dialog-content .img-customer{
+    .dialog-content .img-customer {
         float: left;
-        width: 200px;
-        height: 215px;        
+        width: 160px;
+        height: 160px;
         margin-right: 10px;
         margin-bottom: 16px;
     }
@@ -68,7 +68,8 @@
 .info-right{
 /*    position: absolute;*/  
 /*    left: 210px;*/
-    float: right;
+    /*float: right;*/
+    float: left;
     height: auto;
     width: calc(100% - 210px);
 }

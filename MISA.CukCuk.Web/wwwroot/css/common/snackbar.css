@@ -2,14 +2,15 @@
 .snackbar {
     visibility: hidden;
     align-items: center;
+    /*width: auto;*/
     min-width: 250px;
-    max-width: 400px;
+    /*max-width: 600px;*/
     margin-left: -125px; 
     background-color: #ffffff;
     background-size: 48px;
     color: #000000;
     font-size: 13px;
-    text-align: center;
+    /*text-align: center;*/
     border-radius: 4px;
     padding: 16px;
     position: fixed;
@@ -68,5 +69,7 @@
     }
 
 .snackbar-mesenger{
+    margin-right: 36px;
+    /*width: auto;*/
     color: #000000;
 }

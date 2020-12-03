@@ -112,7 +112,6 @@
 
             <table id="table-employee" style="width:100%;" cellspacing="0">
                 <colgroup>
-                    <col style="width:50px;" />
                     <col style="width:100px" />
                     <col style="width:130px" />
                     <col style="width:80px" />
@@ -126,7 +125,6 @@
                 </colgroup>
                 <thead class="gird-header">
                     <tr fieldPK="EmployeeID">
-                        <th class="text-align-left" fieldName="index"> </th>
                         <th class="text-align-left" fieldName="EmployeeCode">Mã nhân viên</th>
                         <th class="text-align-left" fieldName="FullName">Họ và tên</th>
                         <th class="text-align-left" fieldName="GenderName">Giới tính</th>
@@ -146,19 +144,36 @@
         </div>
 
         <div class="tfoot">
-            <div class="count-emplyee">Hiển thị 1-5 lao động</div>
+            <div class="tfoot-left">
+                <span class="shows-record"></span>
+                <span class="total-record"></span>
+            </div>
             <div class="page-navigations">
-                <i class="fas fa-angle-double-left"></i>
+                <i class="fas fa-angle-double-left next-page" nextPage="left"></i>
                 <i class="fas fa-angle-left"></i>
-                <button class="page-table page-selected">1</button>
-                <button class="page-table">2</button>
-                <button class="page-table">3</button>
-                <button class="page-table">4</button>
-                <i class="fas fa-angle-right"></i>
-                <i class="fas fa-angle-double-right"></i>
+                <div class="select-page">
+                    <button class="page-table page1 page-selected" nextPage="left" value="1">1</button>
+                    <button class="page-table page2" nextPage="left" value="2">2</button>
+                    <button class="page-table page3" value="3">3</button>
+                    <button class="page-table page4" nextPage="right" value="4">4</button>
+                    <button class="page-table page4" nextPage="right" value="5">5</button>
+                </div>
+                <i class="fas fa-angle-right next-right-page"></i>
+                <i class="fas fa-angle-double-right next-page" nextPage="right"></i>
 
             </div>
-            <div class="count-page">5/trang</div>
+            <div class="tfoot-right">
+                <select class="select-count-record">
+                    <option class="count-record" value="50">50</option>
+                    <option class="count-record" value="100">100</option>
+                    <option class="count-record" value="150">150</option>
+                </select> nhân viên/trang
+            </div>
+
+        </div>
+        <div class="load-data-modal"></div>
+        <div class="load-data">
+            <i class="fas fa-spinner"></i>
         </div>
 
     </div>
@@ -277,10 +292,6 @@
         <div class="tfoot-dialog">
             <div>
                 <button class="btn btn-cancel">Hủy</button>
-                <button class="btn-icon btn-delete">
-                    <i class="fas fa-trash-alt"></i>
-                    <div>Xóa</div>
-                </button>
                 <button class="btn-icon btn-save">
                     <i class="fas fa-save"></i>
                     <div>Lưu</div>
